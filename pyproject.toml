@@ -1,0 +1,13 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "test"
+version = "0.1"
+description = "testing this action"
+dependencies = ["maturin"]
+
+[tool.maturin]
+python-source = "pysrc"
+module-name = "test_bundle.loglib"
