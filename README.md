@@ -1,3 +1,5 @@
+[![Dry Run](https://github.com/d33p0st/python-rust-mix-build/actions/workflows/test.yml/badge.svg)](https://github.com/d33p0st/python-rust-mix-build/actions/workflows/test.yml)
+
 # Overview
 
 `python-rust-mix-build` is a GitHub Action that checks if the Python-Rust mix project passes build or not.
@@ -56,6 +58,10 @@ cc = "1.0"
   permissions: write-all
   ``` 
 - `GH_TOKEN`: This takes GITHUB API TOKEN as input, if `permissions: write-all` line is provided, The action will automatically get the GITHUB TOKEN from your account. However, If not provided, `GH_TOKEN` needs to be set with proper permissions.
+
+## Caution
+
+You need to pull auto-generated commits in case of using `replace` input, Else your repo will mess up.
 
 ## Issues
 
