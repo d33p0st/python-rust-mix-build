@@ -1,4 +1,4 @@
-name: "Python Rust Mix Project Build Test"
+name: "Python Rust Mixed Project Build Test"
 author: Soumyo Deep Gupta (@d33pster or @d33p0st)
 description: "Build test for python and rust mix projects using maturin."
 
