@@ -43,8 +43,10 @@ runs:
     
     - name: Set env variable for replace
       id: set-env
+      shell: bash -el {0}
       run: echo "REPLACE=${{ inputs.replace }}" >> $GITHUB_ENV
     
     - name: Check and Replace
+      shell: bash -el {0}
       if: ${{ env.REPLACE == 'true' }}
       run: echo "hehe"
