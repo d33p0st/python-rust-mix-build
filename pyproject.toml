@@ -6,7 +6,7 @@ build-backend = "maturin"
 name = "test"
 version = "0.1"
 description = "testing this action"
-dependencies = ["maturin"]
+dependencies = ["maturin", "deny-me", "wrapper-bar"]
 
 [tool.maturin]
 python-source = "pysrc"
