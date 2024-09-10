@@ -6,6 +6,7 @@ fn demo() -> PyResult<()> {
 }
 
 #[pymodule]
+#[pyo3(name = "rust")]
 fn rust(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(demo, m)?)?;
     Ok(())
