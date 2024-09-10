@@ -21,6 +21,11 @@ inputs:
     description: "set replace on off."
     required: false
     default: false
+  
+  GH_TOKEN:
+    description: "API"
+    required: false
+    default: ${{ github.token }}
 
 runs:
   using: "composite"
@@ -49,4 +54,13 @@ runs:
     - name: Check and Replace
       shell: bash -el {0}
       if: ${{ env.REPLACE == 'true' }}
-      run: echo "hehe"
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add .
+        git commit -m "added bins"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ inputs.GH_TOKEN }}
+      shell: bash -el {0}
+    
