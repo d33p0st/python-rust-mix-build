@@ -50,3 +50,17 @@ cc = "1.0"
 - `python-version`: specify the python version. Default is `3.12`
 - `miniconda-version`: specify the miniconda version to use as `maturin` needs either venv or miniconda to work. Default is `"latest"`
 - `replace`: Takes boolean values. Default is `false`. This builds and pushes that built binary back to the repository.
+  
+  For this to work, add an addition line to your workflow file:
+  ```yaml
+  permissions: write-all
+  ``` 
+- `GH_TOKEN`: This takes GITHUB API TOKEN as input, if `permissions: write-all` line is provided, The action will automatically get the GITHUB TOKEN from your account. However, If not provided, `GH_TOKEN` needs to be set with proper permissions.
+
+## Issues
+
+Feel free to submit any issues [here](https://github.com/d33p0st/python-rust-mix-build/issues).
+
+## Pull Requests
+
+Create any relevant pull requests [here](https://github.com/d33p0st/python-rust-mix-build/pulls).
