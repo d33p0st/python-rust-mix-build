@@ -1,0 +1,38 @@
+name: "Python Rust Mix Project Build Test"
+author: Soumyo Deep Gupta (@d33pster or @d33p0st)
+description: "Build test for python and rust mix projects using maturin."
+
+branding:
+  icon: box
+  color: black
+
+inputs:
+  python-version:
+    description: "Python version to use."
+    required: False
+    default: 3.12
+  
+  miniconda-version:
+    description: "Set miniconda version."
+    required: False
+    default: "latest"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - uses: conda-incubator/setup-miniconda@v3
+      with:
+        miniconda-version: ${{ inputs.miniconda-version }}
+        python-version: ${{ inputs.python-version }}
+        activate-environment: rustmix
+    
+    - name: Install maturin
+      shell: bash -el {0}
+      run: |
+        conda info
+        pip install maturin
+    
+    - name: Run Build
+      shell: bash -el {0}
+      run: maturin develop
