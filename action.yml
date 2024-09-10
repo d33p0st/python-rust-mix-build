@@ -41,6 +41,9 @@ runs:
       run: |
         conda info
         pip install maturin
+        echo $action_path
+      env:
+        action_path: ${{ github.action_path }}
     
     - name: Run Build
       shell: bash -el {0}
@@ -53,17 +56,12 @@ runs:
     
     - name: Check and Replace
       shell: bash -el {0}
-      if: ${{ env.REPLACE == 'true' }}
       run: |
-        if git diff --quiet; then
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "added bins"
-          git push
-        else
-          echo No Changes Made
-        fi
+        if [[ "$RUNNER_OS" == "Linux" || "$RUNNER_OS" == "macOS" ]]; then
+          SYNC="$action_path/sync.py"
+        elif [[ "$RUNNER_OS" == "Windows" ]]; then
+          SYNC="$action_path\\"
       env:
         GITHUB_TOKEN: ${{ inputs.GH_TOKEN }}
+        action_path: ${{ github.action_path }}
     
