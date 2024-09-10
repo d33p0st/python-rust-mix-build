@@ -62,5 +62,4 @@ runs:
         git push
       env:
         GITHUB_TOKEN: ${{ inputs.GH_TOKEN }}
-      shell: bash -el {0}
     
