@@ -9,13 +9,18 @@ branding:
 inputs:
   python-version:
     description: "Python version to use."
-    required: False
+    required: false
     default: 3.12
   
   miniconda-version:
     description: "Set miniconda version."
-    required: False
+    required: false
     default: "latest"
+  
+  replace:
+    description: "set replace on off."
+    required: false
+    default: false
 
 runs:
   using: "composite"
@@ -35,3 +40,11 @@ runs:
     - name: Run Build
       shell: bash -el {0}
       run: maturin develop
+    
+    - name: Set env variable for replace
+      id: set-env
+      run: echo "REPLACE=${{ inputs.replace }}" >> $GITHUB_ENV
+    
+    - name: Check and Replace
+      if: ${{ env.REPLACE == 'true' }}
+      run: echo "hehe"
