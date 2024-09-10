@@ -12,7 +12,7 @@ jobs:
               run: pwd && ls
             
             - name: Run Action
-              uses: ./action
+              uses: ./
               with:
                 python-version: 3.9
                 miniconda-version: "latest"
