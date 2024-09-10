@@ -10,4 +10,4 @@ dependencies = ["maturin", "deny-me", "wrapper-bar"]
 
 [tool.maturin]
 python-source = "pysrc"
-module-name = "test_bundle.loglib"
+module-name = "test_bundle.rust"
