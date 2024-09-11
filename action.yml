@@ -40,10 +40,7 @@ runs:
       shell: bash -el {0}
       run: |
         conda info
-        pip install maturin
-        echo $action_path
-      env:
-        action_path: ${{ github.action_path }}
+        pip install maturin gitpython
     
     - name: Run Build
       shell: bash -el {0}
@@ -58,9 +55,12 @@ runs:
       shell: bash -el {0}
       run: |
         if [[ "$RUNNER_OS" == "Linux" || "$RUNNER_OS" == "macOS" ]]; then
-          SYNC="$action_path/sync.py"
+          SYNC="$action_path/codes/sync.py"
         elif [[ "$RUNNER_OS" == "Windows" ]]; then
-          SYNC="$action_path\\"
+          SYNC="$action_path\codes\sync.py"
+        fi
+
+        python $SYNC
       env:
         GITHUB_TOKEN: ${{ inputs.GH_TOKEN }}
         action_path: ${{ github.action_path }}
