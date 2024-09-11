@@ -54,16 +54,18 @@ runs:
     - name: Check and Replace
       shell: bash -el {0}
       run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        if [ ${{ env.REPLACE }} == 'true' ]; then
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-        if [[ "$RUNNER_OS" == "Linux" || "$RUNNER_OS" == "macOS" ]]; then
-          SYNC="$action_path/codes/sync.py"
-        elif [[ "$RUNNER_OS" == "Windows" ]]; then
-          SYNC="$action_path\codes\sync.py"
+          if [[ "$RUNNER_OS" == "Linux" || "$RUNNER_OS" == "macOS" ]]; then
+            SYNC="$action_path/codes/sync.py"
+          elif [[ "$RUNNER_OS" == "Windows" ]]; then
+            SYNC="$action_path\codes\sync.py"
+          fi
+
+          python $SYNC
         fi
-
-        python $SYNC
       env:
         GITHUB_TOKEN: ${{ inputs.GH_TOKEN }}
         action_path: ${{ github.action_path }}
