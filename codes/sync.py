@@ -34,7 +34,7 @@ class sync:
         for line in toml:
             line = line.replace('\n', '')
             if line.startswith('python-source'):
-                ps = line.split('=')[-1].strip()
+                ps = line.split('=')[-1].strip().replace('\"', '').replace('\'', '')
                 check = True
                 break
         
