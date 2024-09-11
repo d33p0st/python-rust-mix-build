@@ -1,4 +1,4 @@
-import os
+import os, platform, sys
 from git import Repo
 
 # class lister:
@@ -27,13 +27,28 @@ class sync:
         token = os.environ['GITHUB_TOKEN']
         repo = Repo(os.getcwd())
 
-        if repo.is_dirty(untracked_files=True):
-            repo.index.add('')
-            repo.index.commit(f'mixed-bins added by [bot].')
-            origin = repo.remote()
-            origin.push()
-            print("Updates pushed!")
+        with open('pyproject.toml', 'r+') as tml:
+            toml = tml.readlines()
+        
+        check = False
+        for line in toml:
+            line = line.replace('\n', '')
+            if line.startswith('python-source'):
+                ps = line.split('=')[-1].strip()
+                check = True
+                break
+        
+        if not check:
+            print("python-source not defined in maturin config under pyproject.toml")
+            sys.exit(1)
         else:
-            print("No change detected.")
+            if repo.is_dirty(untracked_files=True):
+                repo.index.add(os.path.join(os.getcwd(), ps))
+                repo.index.commit(f'mixed-bins added by [bot].')
+                origin = repo.remote()
+                origin.push()
+                print("Updates pushed!")
+            else:
+                print("No change detected.")
 
 sync()
