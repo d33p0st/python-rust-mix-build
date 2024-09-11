@@ -6,7 +6,7 @@ permissions: write-all
 
 jobs:
     test:
-        runs-on: windows-latest
+        runs-on: macos-13
         steps:
             - uses: actions/checkout@v3
             
