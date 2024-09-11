@@ -29,7 +29,7 @@ class sync:
 
         if repo.is_dirty(untracked_files=True):
             repo.index.add('*')
-            repo.index.commit(f'mix-bin added by bot.')
+            repo.index.commit(f'mixed-bins added by [bot].')
             origin = repo.remote()
             origin.push()
             print("Updates pushed!")
