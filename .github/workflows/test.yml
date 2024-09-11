@@ -4,6 +4,9 @@ on: [push]
 
 permissions: write-all
 
+env:
+  CARGO_TERM_COLOR: always
+
 jobs:
     test:
         runs-on: macos-13
