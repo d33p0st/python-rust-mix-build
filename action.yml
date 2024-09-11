@@ -54,7 +54,7 @@ runs:
     - name: Check and Replace
       shell: bash -el {0}
       run: |
-        if [ ${{ env.REPLACE }} == 'true' ]; then
+        if [ "${{ env.REPLACE }}" == "true" ]; then
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
