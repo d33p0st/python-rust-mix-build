@@ -28,7 +28,7 @@ class sync:
         repo = Repo(os.getcwd())
 
         if repo.is_dirty(untracked_files=True):
-            repo.index.add('*')
+            repo.index.add('')
             repo.index.commit(f'mixed-bins added by [bot].')
             origin = repo.remote()
             origin.push()
