@@ -1,26 +1,5 @@
-import os, platform, sys
+import os, sys
 from git import Repo
-
-# class lister:
-#     def __init__(self, directory: str = os.getcwd()):
-#         self.dir = directory
-    
-#     @property
-#     def scan(self) -> list[str]:
-#         entries = []
-
-#         for dirpath, dirnames, filenames in os.walk(self.dir):
-#             for dirname in dirnames:
-#                 entries.append(os.path.join(dirpath, dirname))
-#             for filename in filenames:
-#                 entries.append(os.path.join(dirpath, filename))
-        
-#         return entries
-
-#     def list(self, file: str = os.path.join(os.getcwd(), '__all_files__')):
-#         with open(file, 'w+') as f_r:
-#             for f in self.scan:
-#                 f_r.write(f + "\n")
 
 class sync:
     def __init__(self):
