@@ -44,22 +44,38 @@ class sync:
         else:
             with open('__all_files__', 'r+') as ref:
                 oldpaths = ref.readlines()
-                print("oldpaths:", oldpaths)
+            
+            print("Old Paths:")
+            for path in oldpaths:
+                path = path.replace('\n', '')
+                print(path if len(path) <= 25 else "..."+path[-25:])
             
             os.system(f"python {os.path.join(os.path.dirname(os.path.abspath(__file__)), 'presync.py')}")
 
             with open('__all_files__', 'r+') as ref:
                 newpaths = ref.readlines()
-                print("newpaths:", newpaths)
+            
+            print("\nNew Paths:")
+            for path in newpaths:
+                path = path.replace('\n', '')
+                print(path if len(path) <= 25 else "..."+path[-25:])
             
             os.unlink(os.path.join(os.getcwd(), '__all_files__'))
 
-            to_add = []
+            to_add: list[str] = []
             for path in newpaths:
                 if ps in path and path not in oldpaths:
                     to_add.append(path.replace('\n', ''))
             
-            print("files to add:", to_add)
+            # print("files to add:", to_add)
+            if len(to_add) > 0:
+                print("\nFiles to be added At this time:")
+                for path in to_add:
+                    path = path.replace('\n', '')
+                    print(path if len(path) <= 25 else "..."+path[-25:])
+            else:
+                print("\nNo Files to Add.")
+
 
             if repo.is_dirty(untracked_files=True):
                 for path in to_add:
@@ -67,8 +83,8 @@ class sync:
                 repo.index.commit(f'mixed-bins added by [bot].')
                 origin = repo.remote()
                 origin.push()
-                print("Updates pushed!")
+                print("Change Detected: Push success.")
             else:
-                print("No change detected.")
+                print("No change detected at this time. Ok")
 
 sync()
