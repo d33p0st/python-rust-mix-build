@@ -2,7 +2,7 @@ use pyo3::prelude::*;
 
 #[pyfunction]
 fn demo() -> PyResult<()> {
-    println!("heheh");
+    println!("hehehuhu");
     Ok(())
 }
 
