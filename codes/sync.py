@@ -32,8 +32,13 @@ class sync:
             os.system(f"python {os.path.join(os.path.dirname(os.path.abspath(__file__)), 'presync.py')}")
 
             with open('__all_files__', 'r+') as ref:
-                newpaths = ref.readlines()
-            
+                new = ref.readlines()
+
+            newpaths: list[str] = []
+            for path in new:
+                if path not in oldpaths:
+                    newpaths.append(path)
+
             print("\nNew Paths:")
             for path in newpaths:
                 path = path.replace('\n', '')
@@ -47,19 +52,26 @@ class sync:
                     capture_output=True, text=True, check=True
                 )
 
-                modified = result.stdout.splitlines()
-                for i in range(len(modified)):
-                    modified[i] = os.path.join(os.getcwd(), modified[i])
+                mod = result.stdout.splitlines()
+                modified: list[str] = []
+                for i in range(len(mod)):
+                    if mod[i].endswith('.rs'):
+                        modified.append(mod[i])
             except subprocess.CalledProcessError:
                 print("Error Checking last commit.")
                 sys.exit(1)
 
             to_add: list[str] = []
             for path in newpaths:
+                path = path.replace('\n', '')
                 if ps in path and path not in oldpaths:
-                    to_add.append(path.replace('\n', ''))
-                elif ps in path and path in modified:
-                    to_add.append(path.replace('\n', ''))
+                    to_add.append(path)
+                elif ps in path and path.endswith('.so') and len(modified)>0:
+                    to_add.append(path)
+                elif ps in path and path.endswith('.so'):
+                    diff = repo.git.diff(path)
+                    if diff:
+                        to_add.append(path)
             
             if len(to_add) > 0:
                 print("\nFiles to be added At this time:")
@@ -68,6 +80,7 @@ class sync:
                     print(path if len(path) <= 25 else "..."+path[-25:])
             else:
                 print("\nNo Files to Add.")
+                sys.exit(0)
 
 
             if repo.is_dirty(untracked_files=True):
