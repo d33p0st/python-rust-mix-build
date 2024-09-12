@@ -56,6 +56,8 @@ class sync:
             for path in newpaths:
                 if path not in oldpaths and 'target' not in path and '__pycache__' not in path and 'Cargo.lock' not in path and 'build' not in path and 'dist' not in path:
                     to_add.append(path)
+            
+            print("files to add:", to_add)
 
             if repo.is_dirty(untracked_files=True):
                 for path in to_add:
