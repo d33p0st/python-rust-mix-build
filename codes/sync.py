@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, subprocess
 from git import Repo
 
 class sync:
@@ -41,12 +41,26 @@ class sync:
             
             os.unlink(os.path.join(os.getcwd(), '__all_files__'))
 
+            try:
+                result = subprocess.run(
+                    ["git", "diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD"],
+                    capture_output=True, text=True, check=True
+                )
+
+                modified = result.stdout.splitlines()
+                for i in range(len(modified)):
+                    modified[i] = os.path.join(os.getcwd(), modified[i])
+            except subprocess.CalledProcessError:
+                print("Error Checking last commit.")
+                sys.exit(1)
+
             to_add: list[str] = []
             for path in newpaths:
                 if ps in path and path not in oldpaths:
                     to_add.append(path.replace('\n', ''))
+                elif ps in path and path in modified:
+                    to_add.append(path.replace('\n', ''))
             
-            # print("files to add:", to_add)
             if len(to_add) > 0:
                 print("\nFiles to be added At this time:")
                 for path in to_add:
