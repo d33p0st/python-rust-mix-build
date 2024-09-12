@@ -1,6 +1,27 @@
 import os, sys, subprocess
 from git import Repo
 
+class Lister(list):
+    def __init__(self, directory: str = os.getcwd()):
+        self.dir = directory
+    
+    @property
+    def fill_paths(self) -> list[str]:
+        paths = []
+        for root, dirs, files in os.walk(self.dir):
+            for dir_name in dirs:
+                paths.append(os.path.join(root, dir_name))
+            for file in files:
+                paths.append(os.path.join(root, file))
+        return paths
+
+if __name__ == "__main__":
+    paths = Lister().fill_paths
+    with open('__all_files__', 'w+') as ref:
+        for path in paths:
+            ref.write(path + "\n")
+
+
 class sync:
     def __init__(self):
         token = os.environ['GITHUB_TOKEN']
@@ -34,17 +55,20 @@ class sync:
             with open('__all_files__', 'r+') as ref:
                 new = ref.readlines()
 
+            os.unlink(os.path.join(os.getcwd(), '__all_files__'))
+
             newpaths: list[str] = []
             for path in new:
-                if path not in oldpaths and 'target' not in path:
+                if path not in oldpaths and 'target' not in path and 'Cargo' not in path:
                     newpaths.append(path)
 
-            print("\nNew Paths:")
-            for path in newpaths:
-                path = path.replace('\n', '')
-                print(path if len(path) <= 25 else "..."+path[-25:])
-            
-            os.unlink(os.path.join(os.getcwd(), '__all_files__'))
+            if len(newpaths) > 0:
+                print("\nNew Paths:")
+                for path in newpaths:
+                    path = path.replace('\n', '')
+                    print(path if len(path) <= 25 else "..."+path[-25:])
+            else:
+                print("\nNo New Paths.")
 
             try:
                 result = subprocess.run(
@@ -57,7 +81,10 @@ class sync:
                 for i in range(len(mod)):
                     if mod[i].endswith('.rs'):
                         modified.append(mod[i])
-                print("Modified Rust Files:", modified)
+                if len(modified) > 0:
+                    print("Modified Rust Files:", modified)
+                else:
+                    print("No Modified Rust Files Present in the last commit.")
             except subprocess.CalledProcessError:
                 print("Error Checking last commit.")
                 sys.exit(1)
@@ -73,6 +100,13 @@ class sync:
                     diff = repo.git.diff(path)
                     if diff:
                         to_add.append(path)
+            
+            # also check all files under ps
+            all_files_under_pysrc = Lister(os.path.join(os.getcwd(), ps)).fill_paths
+            for path in all_files_under_pysrc:
+                diff = repo.git.diff(path)
+                if diff:
+                    to_add.append(path)
             
             if len(to_add) > 0:
                 print("\nFiles to be added At this time:")
