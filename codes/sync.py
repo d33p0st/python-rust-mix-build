@@ -36,7 +36,7 @@ class sync:
 
             newpaths: list[str] = []
             for path in new:
-                if path not in oldpaths:
+                if path not in oldpaths and 'target' not in path:
                     newpaths.append(path)
 
             print("\nNew Paths:")
@@ -57,6 +57,7 @@ class sync:
                 for i in range(len(mod)):
                     if mod[i].endswith('.rs'):
                         modified.append(mod[i])
+                print("Modified Rust Files:", modified)
             except subprocess.CalledProcessError:
                 print("Error Checking last commit.")
                 sys.exit(1)
