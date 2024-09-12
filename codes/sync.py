@@ -42,8 +42,24 @@ class sync:
             print("python-source not defined in maturin config under pyproject.toml")
             sys.exit(1)
         else:
+            with open('__all_files__', 'r+') as ref:
+                oldpaths = ref.readlines()
+            
+            os.system(f"python {os.path.join(os.path.dirname(os.path.abspath(__file__)), 'presync.py')}")
+
+            with open('__all_files__', 'r+') as ref:
+                newpaths = ref.readlines()
+            
+            os.unlink(os.path.join(os.getcwd(), '__all_files__'))
+
+            to_add = []
+            for path in newpaths:
+                if path not in oldpaths and 'target' not in path and '__pycache__' not in path and 'Cargo.lock' not in path and 'build' not in path and 'dist' not in path:
+                    to_add.append(path)
+
             if repo.is_dirty(untracked_files=True):
-                repo.index.add(os.path.join(os.getcwd(), ps))
+                for path in to_add:
+                    repo.index.add(path)
                 repo.index.commit(f'mixed-bins added by [bot].')
                 origin = repo.remote()
                 origin.push()
