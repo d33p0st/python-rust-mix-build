@@ -56,8 +56,8 @@ class sync:
 
             to_add = []
             for path in newpaths:
-                if path not in oldpaths and 'target' not in path and '__pycache__' not in path and 'Cargo.lock' not in path and 'build' not in path and 'dist' not in path:
-                    to_add.append(path)
+                if ps in path and path not in oldpaths:
+                    to_add.append(path.replace('\n', ''))
             
             print("files to add:", to_add)
 
