@@ -23,4 +23,4 @@ jobs:
               with:
                 python-version: 3.12
                 miniconda-version: "latest"
-                replace: yes
+                replace: true
