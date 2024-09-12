@@ -42,6 +42,19 @@ runs:
         conda info
         pip install maturin gitpython
     
+    - name: Create __all_files__
+      shell: bash -el {0}
+      run: |
+        if [[ "$RUNNER_OS" == "Linux" || "$RUNNER_OS" == "macOS" ]]; then
+          PRESYNC="$action_path/codes/presync.py"
+        elif [[ "$RUNNER_OS" == "Windows" ]]; then
+          PRESYNC="$action_path\codes\presync.py"
+        fi
+
+        python $PRESYNC
+      env:
+        action_path: ${{ github.action_path }}
+    
     - name: Run Build
       shell: bash -el {0}
       run: maturin develop
