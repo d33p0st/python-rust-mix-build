@@ -44,11 +44,13 @@ class sync:
         else:
             with open('__all_files__', 'r+') as ref:
                 oldpaths = ref.readlines()
+                print("oldpaths:", oldpaths)
             
             os.system(f"python {os.path.join(os.path.dirname(os.path.abspath(__file__)), 'presync.py')}")
 
             with open('__all_files__', 'r+') as ref:
                 newpaths = ref.readlines()
+                print("newpaths:", newpaths)
             
             os.unlink(os.path.join(os.getcwd(), '__all_files__'))
 
