@@ -104,9 +104,10 @@ class sync:
             # also check all files under ps
             all_files_under_pysrc = Lister(os.path.join(os.getcwd(), ps)).fill_paths
             for path in all_files_under_pysrc:
-                diff = repo.git.diff(path)
-                if diff:
-                    to_add.append(path)
+                if not os.path.isdir(path):
+                    diff = repo.git.diff(path)
+                    if diff:
+                        to_add.append(path)
             
             if len(to_add) > 0:
                 print("\nFiles to be added At this time:")
